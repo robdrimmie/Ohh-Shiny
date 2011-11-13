@@ -2,6 +2,8 @@ var shine = {
   totalInteractions: 0,
   interactionsSinceLastEvent: 0,
   nextEventAt: 0,
+  paper: Raphael( 0, 0, $(window).width(), $(window).height() ),
+  center: { x: Math.floor( $(window).width() / 2 ), y: Math.floor( $(window).height() / 2 ) },
 
   random256: function() {
     return Math.floor( Math.random() * 256 );
@@ -26,6 +28,11 @@ var shine = {
   },
 
   doEvent: function() {
+    var circle;
+
+    circle = shine.paper.circle( 50, 40, 10 );
+    circle.attr( "fill", "#f00" );
+    circle.attr( "stroke", "#000" );
 
   },
 
@@ -33,6 +40,7 @@ var shine = {
     shine.totalInteractions++;
     shine.interactionsSinceLastEvent++;
 
+    shine.paper.clear();
     if( shine.interactionsSinceLastEvent >= shine.nextEventAt ) {
       shine.doEvent();
       shine.interactionsSinceLastEvent = 0;
@@ -42,6 +50,7 @@ var shine = {
 
     shine.background.randomize();
     body.style.backgroundColor = shine.background.toHex();
+    console.log( shine.interactionsSinceLastEvent + ':' + shine.nextEventAt );
   }
 }
 
