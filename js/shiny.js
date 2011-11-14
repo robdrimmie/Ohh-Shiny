@@ -5,25 +5,32 @@ var shine = {
   paper: Raphael( 0, 0, $(window).width(), $(window).height() ),
   center: { x: Math.floor( $(window).width() / 2 ), y: Math.floor( $(window).height() / 2 ) },
 
-  random256: function() {
-    return Math.floor( Math.random() * 256 );
+  random: function( max ) {
+    return Math.floor( Math.random() * max );
   },
 
   background: {
-    red: 0,
-    green: 0,
-    blue: 0,
-
-    toHex: function() {
-      return "#" + shine.background.red.toString(16) +
-                   shine.background.green.toString(16) +
-                   shine.background.blue.toString(16);
-    },
+    hue: 0,
+    saturation: 0,
+    lightness: 0,
 
     randomize: function() {
-      shine.background.red = shine.random256();
-      shine.background.green = shine.random256();
-      shine.background.blue = shine.random256();
+      shine.background.hue = shine.random( 360 );
+      shine.background.saturation = shine.random( 100 );
+      shine.background.lightness = shine.random( 100 );
+
+      return shine.background;
+    },
+
+    set: function() {
+      var body = document.getElementsByTagName( 'body' )[0];
+
+      body.style.backgroundColor = 'hsl(' + 
+        shine.background.hue + ', ' +
+        shine.background.saturation + '%, ' +
+        shine.background.lightness + '%)';
+
+      return shine.background;
     }
   },
 
@@ -44,12 +51,10 @@ var shine = {
     if( shine.interactionsSinceLastEvent >= shine.nextEventAt ) {
       shine.doEvent();
       shine.interactionsSinceLastEvent = 0;
-      shine.nextEventAt = Math.floor( Math.random() * 100 );
+      shine.nextEventAt = Math.floor( Math.random() * 10 );
     }
-    var body = document.getElementsByTagName( 'body' )[0];
 
-    shine.background.randomize();
-    body.style.backgroundColor = shine.background.toHex();
+    shine.background.randomize().set();
     console.log( shine.interactionsSinceLastEvent + ':' + shine.nextEventAt );
   }
 }
