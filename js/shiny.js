@@ -5,8 +5,14 @@ var shine = {
   paper: Raphael( 0, 0, $(window).width(), $(window).height() ),
   center: { x: Math.floor( $(window).width() / 2 ), y: Math.floor( $(window).height() / 2 ) },
 
-  random: function( max ) {
-    return Math.floor( Math.random() * max );
+  util: {
+    random: function( max ) {
+      return Math.floor( Math.random() * max );
+    },
+
+    makeHslString: function( h, s, l ) {
+      return 'hsl(' + h + ', ' + s + '%, ' + l + '% )';
+    }
   },
 
   background: {
@@ -15,9 +21,9 @@ var shine = {
     lightness: 0,
 
     randomize: function() {
-      shine.background.hue = shine.random( 360 );
-      shine.background.saturation = shine.random( 100 );
-      shine.background.lightness = shine.random( 100 );
+      shine.background.hue = shine.util.random( 360 );
+      shine.background.saturation = shine.util.random( 100 );
+      shine.background.lightness = shine.util.random( 100 );
 
       return shine.background;
     },
@@ -25,10 +31,11 @@ var shine = {
     set: function() {
       var body = document.getElementsByTagName( 'body' )[0];
 
-      body.style.backgroundColor = 'hsl(' + 
-        shine.background.hue + ', ' +
-        shine.background.saturation + '%, ' +
-        shine.background.lightness + '%)';
+      body.style.backgroundColor = shine.util.makeHslString( 
+        shine.background.hue,
+        shine.background.saturation,
+        shine.background.lightness
+      );
 
       return shine.background;
     }
@@ -38,8 +45,16 @@ var shine = {
     var circle;
 
     circle = shine.paper.circle( 50, 40, 10 );
-    circle.attr( "fill", "#f00" );
-    circle.attr( "stroke", "#000" );
+    circle.attr( "fill", shine.util.makeHslString(
+      shine.background.hue - 180,
+      shine.background.saturation,
+      shine.background.lightness
+    ));
+    circle.attr( "stroke", shine.util.makeHslString(
+      shine.background.hue - 90,
+      shine.background.saturation,
+      shine.background.lightness
+    ));
 
   },
 
